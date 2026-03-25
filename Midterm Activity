@@ -1,0 +1,28 @@
+MIDTERM ACT 2 ANALYZE THE FLOWCHART ALGORITHM
+
+
+my_list = []
+
+for x in range(1, 10):
+    my_list.append(x)
+
+print("Original list:", my_list)
+print("Length of list:", len(my_list))
+
+y = 1
+for x in range(len(my_list)):
+    if my_list.count(my_list[x]) > 1:
+        my_list.remove(my_list[x])
+    else:
+        y = y + 1
+
+print("The list with unique elements only.")
+print(my_list)
+
+
+Original list: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+Length of list: 9
+The list with unique elements only.
+[1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+
