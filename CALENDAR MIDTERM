@@ -1,0 +1,143 @@
+Class Calendar:
+    def __init__(self):
+        self.events = {}
+
+    def is_leap_year(self, year):
+        if (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0):
+            return True
+        return False
+
+    def get_days_in_month(self, month, year):
+        match month:
+            case 1 | 3 | 5 | 7 | 8 | 10 | 12:
+                return 31
+            case 4 | 6 | 9 | 11:
+                return 30
+            case 2:
+                return 29 if self.is_leap_year(year) else 28
+            case _:
+                return -1
+
+    def get_month_name(self, month):
+        match month:
+            case 1:
+                return "January"
+            case 2:
+                return "February"
+            case 3:
+                return "March"
+            case 4:
+                return "April"
+            case 5:
+                return "May"
+            case 6:
+                return "June"
+            case 7:
+                return "July"
+            case 8:
+                return "August"
+            case 9:
+                return "September"
+            case 10:
+                return "October"
+            case 11:
+                return "November"
+            case 12:
+                return "December"
+            case _:
+                return "Unknown"
+
+    def is_valid_date(self, day, month, year):
+        if year < 2026 or year > 2028:
+            print("[ERROR] Year must be between 2026 to 2028 only!")
+            return False
+
+        if month < 1 or month > 12:
+            print("[ERROR] Month must be between 1 to 12 only!")
+            return False
+
+        max_days = self.get_days_in_month(month, year)
+        if day < 1 or day > max_days:
+            print(f"[ERROR] Day must be between 1 and {max_days} "
+                  f"for {self.get_month_name(month)} {year}!")
+            return False
+
+        return True
+
+
+cal = Calendar()
+
+while True:
+    print("\n---- MAIN MENU----")
+    print("Add an Event")
+    print("View Events on a Date")
+    print("View All Events")
+    print("Delete an Event")
+    print("Exit")
+
+    choice = input("\nEnter your choice (1-5): ")
+
+    if choice == "1":
+        print("\n--- ADD AN EVENT ----")
+        print("Enter the date:")
+
+        year = int(input("Year(2026-2028): "))
+        month = int(input("Month (1-12): "))
+        day = int(input("Day:"))
+
+        if cal.is_valid_date(day, month, year):
+            event = input("Enter event name: ")
+
+            key = (day, month, year)
+            if key not in cal.events:
+                cal.events[key] = []
+            cal.events[key].append(event)
+
+            print(f"\n[SUCCESS ] Event '{event}' Added on {cal.get_month_name(month)} {day}, {year}!")
+
+    elif choice == "2":
+        print("\n--- VIEW EVENTS ON A DATE ----")
+
+        year = int(input("Year: "))
+        month = int(input("Month: "))
+        day = int(input("Day:"))
+
+        key = (day, month, year)
+        if key in cal.events:
+            print(f"\nEvents on {cal.get_month_name(month)} {day}, {year}:")
+            for i, e in enumerate(cal.events[key], 1):
+                print(f"{i}. {e}")
+        else:
+            print("\nNo events found.")
+
+    elif choice == "3":
+        print("\n--- ALL EVENTS ----")
+
+        if not cal.events:
+            print("No events available.")
+        else:
+            for (day, month, year), events in cal.events.items():
+                print(f"\n{cal.get_month_name(month)} {day}, {year}:")
+                for e in events:
+                    print(f"- {e}")
+
+    elif choice == "4":
+        print("\n--- DELETE AN EVENT ----")
+
+        year = int(input("Year: "))
+        month = int(input("Month: "))
+        day = int(input("Day:"))
+
+        key = (day, month, year)
+        if key in cal.events:
+            del cal.events[key]
+            print("\n[SUCCESS] Event(s) deleted.")
+        else:
+            print("\nNo event found on that date.")
+
+    elif choice == "5":
+        print("\nExiting program...")
+        break
+
+    else:
+        print("\nInvalid choice. Please try again.")
